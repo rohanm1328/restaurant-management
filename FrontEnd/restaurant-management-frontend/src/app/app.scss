@@ -1,0 +1,129 @@
+.navbar {
+  width: 100%;
+  min-height: 105px;
+  padding: 15px 5% 15px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1c1c1c;
+  border-bottom: 3px solid #ff8500;
+  font-family: 'Poppins', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.brand-icon {
+  font-size: 48px;
+  color: #ff8500;
+}
+
+.brand-text h2 {
+  color: white;
+  font-size: 27px;
+  font-weight: 700;
+  margin: 0;
+
+  span {
+    color: #ff8500;
+  }
+}
+
+.brand-text p {
+  color: #cccccc;
+  font-size: 12px;
+  margin: 5px 0 0;
+}
+
+/* Navigation */
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  a {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 25px;
+    border-radius: 30px;
+    transition: 0.3s;
+  }
+}
+
+/* Home Icon */
+.auth-buttons .home-btn {
+  color: #ff8500;
+  font-size: 22px;
+  padding: 12px;
+  border-radius: 50%;
+
+  &:hover {
+    color: white;
+    background: #ff8500;
+    transform: scale(1.1);
+  }
+}
+
+/* Login */
+.login-btn {
+  color: white;
+  border: 1px solid white;
+
+  &:hover {
+    background: white;
+    color: #1c1c1c;
+  }
+}
+
+/* Register */
+.register-btn {
+  color: white;
+  background: #ff8500;
+
+  &:hover {
+    background: #e36e00;
+  }
+}
+
+/* Responsive */
+@media (max-width: 550px) {
+  .navbar {
+    padding: 15px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-icon {
+    font-size: 35px;
+  }
+
+  .brand-text h2 {
+    font-size: 20px;
+  }
+
+  .brand-text p {
+    font-size: 10px;
+  }
+
+  .auth-buttons {
+    gap: 5px;
+
+    a {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+
+    .home-btn {
+      font-size: 20px;
+      padding: 8px;
+    }
+  }
+}

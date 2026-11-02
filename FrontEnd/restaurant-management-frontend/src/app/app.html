@@ -1,1 +1,30 @@
-<app-register></app-register>
+<nav class="navbar">
+
+  <div class="brand">
+    <div class="brand-icon">🍴</div>
+
+    <div class="brand-text">
+      <h2>Restro<span>Manage</span></h2>
+      <p>Manage Your Restaurant Better</p>
+    </div>
+  </div>
+
+  <div class="auth-buttons">
+
+    <a routerLink="/" class="home-btn" title="Home">
+      <i class="fa-solid fa-house"></i>
+    </a>
+
+    <a routerLink="/login" class="login-btn">
+      Login
+    </a>
+
+    <a routerLink="/register" class="register-btn">
+      Register
+    </a>
+
+  </div>
+
+</nav>
+
+<router-outlet></router-outlet>
