@@ -1,1 +1,142 @@
-<p>register works!</p>
+<div class="registration-container">
+
+  <div class="registration-card">
+
+    <div class="form-header">
+      <div class="header-icon">👨‍🍳</div>
+      <h2>Employee Registration</h2>
+      <p>Add a new employee to your restaurant team</p>
+    </div>
+
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
+      <!-- Name -->
+      <div class="form-group">
+
+        <label>Full Name</label>
+
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="Enter employee name"
+          [class.invalid]="f['name'].touched && f['name'].invalid"
+        />
+
+        <div class="error" *ngIf="f['name'].touched && f['name'].errors">
+
+          <span *ngIf="f['name'].errors['required']">
+            Name is required.
+          </span>
+
+          <span *ngIf="f['name'].errors['minlength']">
+            Name must contain at least 3 characters.
+          </span>
+
+          <span *ngIf="f['name'].errors['pattern']">
+            Only letters and spaces are allowed.
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Mobile -->
+      <div class="form-group">
+
+        <label>Mobile Number</label>
+
+        <input
+          type="tel"
+          formControlName="mobile"
+          maxlength="10"
+          placeholder="Enter 10 digit mobile number"
+          [class.invalid]="f['mobile'].touched && f['mobile'].invalid"
+        />
+
+        <div class="error" *ngIf="f['mobile'].touched && f['mobile'].errors">
+
+          <span *ngIf="f['mobile'].errors['required']">
+            Mobile number is required.
+          </span>
+
+          <span *ngIf="f['mobile'].errors['pattern']">
+            Enter a valid 10 digit mobile number.
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Address -->
+      <div class="form-group">
+
+        <label>Address</label>
+
+        <textarea
+          rows="3"
+          formControlName="address"
+          placeholder="Enter complete address"
+          [class.invalid]="f['address'].touched && f['address'].invalid"
+        ></textarea>
+
+        <div class="error" *ngIf="f['address'].touched && f['address'].errors">
+
+          <span *ngIf="f['address'].errors['required']">
+            Address is required.
+          </span>
+
+          <span *ngIf="f['address'].errors['minlength']">
+            Address must contain at least 10 characters.
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Role -->
+      <div class="form-group">
+
+        <label>Employee Role</label>
+
+        <select
+          formControlName="role"
+          [class.invalid]="f['role'].touched && f['role'].invalid"
+        >
+
+          <option value="" disabled>Select employee role</option>
+
+          <option *ngFor="let role of roles" [value]="role">
+            {{ role }}
+          </option>
+
+        </select>
+
+        <div class="error" *ngIf="f['role'].touched && f['role'].errors">
+          <span *ngIf="f['role'].errors['required']">
+            Please select an employee role.
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Buttons -->
+      <div class="button-group">
+
+        <button type="button" class="reset-btn" (click)="onReset()">
+          Reset
+        </button>
+
+        <button
+          type="submit"
+          class="submit-btn"
+        >
+          Register Employee
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
