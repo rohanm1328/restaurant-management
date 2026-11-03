@@ -1,79 +1,123 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
-  FormGroup,
   Validators,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
+import { RouterLink, Router } from '@angular/router';
+import { AuthService } from '../../services/auth-api';
+
+// Password match validator
+function passwordMatchValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+
+  const password = control.get('password')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+
+  if (!password || !confirmPassword) {
+    return null;
+  }
+
+  return password === confirmPassword
+    ? null
+    : { passwordMismatch: true };
+}
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink
+  ],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
 export class Register {
 
-  employeeForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  roles = ['Manager', 'Waiter', 'Chef', 'Counterer'];
+  roles = ['Chef', 'Manager', 'Waiter', 'Counter'];
 
-  submitted = false;
+  registerForm = this.fb.group({
 
-  constructor(private fb: FormBuilder) {
+    name: ['', [
+      Validators.required,
+      Validators.minLength(3)
+    ]],
 
-    this.employeeForm = this.fb.group({
+    email: ['', [
+      Validators.required,
+      Validators.email
+    ]],
 
-      name: ['', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.pattern(/^[a-zA-Z ]+$/)
-      ]],
+    phone: ['', [
+      Validators.required,
+      Validators.pattern(/^[0-9]{10}$/)
+    ]],
 
-      mobile: ['', [
-        Validators.required,
-        Validators.pattern(/^[0-9]{10}$/)
-      ]],
+    role: ['', Validators.required],
 
-      address: ['', [
-        Validators.required,
-        Validators.minLength(10)
-      ]],
+    password: ['', [
+      Validators.required,
+      Validators.minLength(6)
+    ]],
 
-      role: ['', Validators.required]
+    confirmPassword: ['', Validators.required]
 
-    });
+  }, {
+    validators: passwordMatchValidator
+  });
 
-  }
+  onSubmit(): void {
 
-  // Easy access to form controls
-  get f() {
-    return this.employeeForm.controls;
-  }
-
-  onSubmit() {
-
-    this.submitted = true;
-
-    if (this.employeeForm.invalid) {
-      this.employeeForm.markAllAsTouched();
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
       return;
     }
 
-    console.log('Employee Registered:', this.employeeForm.value);
+    const formData = this.registerForm.getRawValue();
 
-    alert('Employee Registered Successfully!');
+    // Check password matching
+    if (formData.password !== formData.confirmPassword) {
+      this.registerForm.setErrors({ passwordMismatch: true });
+      return;
+    }
 
-    this.employeeForm.reset();
-    this.submitted = false;
+    // Remove confirmPassword before sending to backend
+    const { confirmPassword, ...registerData } = formData;
 
-  }
+    this.authService.register(registerData).subscribe({
 
-  onReset() {
-    this.employeeForm.reset();
-    this.submitted = false;
+      next: (response: any) => {
+
+        alert(response.message || 'Registration successful!');
+
+        this.registerForm.reset();
+
+        this.router.navigate(['/login']);
+
+      },
+
+      error: (error) => {
+
+        console.error('Registration Error:', error);
+
+        alert(
+          error.error?.message ||
+          'Registration failed. Please try again.'
+        );
+
+      }
+
+    });
+
   }
 
 }

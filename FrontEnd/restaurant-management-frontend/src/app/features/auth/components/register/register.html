@@ -1,141 +1,183 @@
-<div class="registration-container">
+<div class="register-page">
 
-  <div class="registration-card">
+  <div class="register-container">
 
-    <div class="form-header">
-      <div class="header-icon">👨‍🍳</div>
-      <h2>Employee Registration</h2>
-      <p>Add a new employee to your restaurant team</p>
+    <!-- Left Information Section -->
+    <div class="register-info">
+
+      <div class="food-icon">🍽️</div>
+
+      <h1>Join <span>RestroManage</span></h1>
+
+      <h3>Manage Your Restaurant Better!</h3>
+
+      <p>
+        Create your account and become part of our restaurant
+        management team. Manage your daily restaurant activities
+        easily with RestroManage.
+      </p>
+
+      <div class="features">
+        <div>✓ Easy Restaurant Management</div>
+        <div>✓ Manage Your Team</div>
+        <div>✓ Track Daily Operations</div>
+      </div>
+
     </div>
 
-    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+    <!-- Registration Form -->
+    <div class="register-form">
 
-      <!-- Name -->
-      <div class="form-group">
+      <div class="form-heading">
+        <h2>Create Account</h2>
+        <p>Please fill in your details to register</p>
+      </div>
 
-        <label>Full Name</label>
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit()">
 
-        <input
-          type="text"
-          formControlName="name"
-          placeholder="Enter employee name"
-          [class.invalid]="f['name'].touched && f['name'].invalid"
-        />
+        <!-- Name -->
+        <div class="form-group">
 
-        <div class="error" *ngIf="f['name'].touched && f['name'].errors">
+          <label>Full Name</label>
 
-          <span *ngIf="f['name'].errors['required']">
-            Name is required.
-          </span>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Enter your full name">
 
-          <span *ngIf="f['name'].errors['minlength']">
-            Name must contain at least 3 characters.
-          </span>
-
-          <span *ngIf="f['name'].errors['pattern']">
-            Only letters and spaces are allowed.
-          </span>
+          @if (registerForm.get('name')?.touched &&
+               registerForm.get('name')?.invalid) {
+            <small>Please enter at least 3 characters.</small>
+          }
 
         </div>
 
-      </div>
+        <!-- Email -->
+        <div class="form-group">
 
-      <!-- Mobile -->
-      <div class="form-group">
+          <label>Email Address</label>
 
-        <label>Mobile Number</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email">
 
-        <input
-          type="tel"
-          formControlName="mobile"
-          maxlength="10"
-          placeholder="Enter 10 digit mobile number"
-          [class.invalid]="f['mobile'].touched && f['mobile'].invalid"
-        />
-
-        <div class="error" *ngIf="f['mobile'].touched && f['mobile'].errors">
-
-          <span *ngIf="f['mobile'].errors['required']">
-            Mobile number is required.
-          </span>
-
-          <span *ngIf="f['mobile'].errors['pattern']">
-            Enter a valid 10 digit mobile number.
-          </span>
+          @if (registerForm.get('email')?.touched &&
+               registerForm.get('email')?.invalid) {
+            <small>Please enter a valid email address.</small>
+          }
 
         </div>
 
-      </div>
+        <!-- Phone -->
+        <div class="form-group">
 
-      <!-- Address -->
-      <div class="form-group">
+          <label>Phone Number</label>
 
-        <label>Address</label>
+          <input
+            type="tel"
+            formControlName="phone"
+            placeholder="Enter 10-digit phone number"
+            maxlength="10">
 
-        <textarea
-          rows="3"
-          formControlName="address"
-          placeholder="Enter complete address"
-          [class.invalid]="f['address'].touched && f['address'].invalid"
-        ></textarea>
-
-        <div class="error" *ngIf="f['address'].touched && f['address'].errors">
-
-          <span *ngIf="f['address'].errors['required']">
-            Address is required.
-          </span>
-
-          <span *ngIf="f['address'].errors['minlength']">
-            Address must contain at least 10 characters.
-          </span>
+          @if (registerForm.get('phone')?.touched &&
+               registerForm.get('phone')?.invalid) {
+            <small>Enter a valid 10-digit phone number.</small>
+          }
 
         </div>
 
-      </div>
+        <!-- Role -->
+        <div class="form-group">
 
-      <!-- Role -->
-      <div class="form-group">
+          <label>Select Your Role</label>
 
-        <label>Employee Role</label>
+          <div class="role-options">
 
-        <select
-          formControlName="role"
-          [class.invalid]="f['role'].touched && f['role'].invalid"
-        >
+            @for (role of roles; track role) {
 
-          <option value="" disabled>Select employee role</option>
+              <label
+                class="role-card"
+                [class.selected]="registerForm.get('role')?.value === role">
 
-          <option *ngFor="let role of roles" [value]="role">
-            {{ role }}
-          </option>
+                <input
+                  type="radio"
+                  formControlName="role"
+                  [value]="role">
 
-        </select>
+                <span>{{ role }}</span>
 
-        <div class="error" *ngIf="f['role'].touched && f['role'].errors">
-          <span *ngIf="f['role'].errors['required']">
-            Please select an employee role.
-          </span>
+              </label>
+
+            }
+
+          </div>
+
+          @if (registerForm.get('role')?.touched &&
+               registerForm.get('role')?.invalid) {
+            <small>Please select your role.</small>
+          }
+
         </div>
 
-      </div>
+        <!-- Password -->
+        <div class="form-group">
 
-      <!-- Buttons -->
-      <div class="button-group">
+          <label>Password</label>
 
-        <button type="button" class="reset-btn" (click)="onReset()">
-          Reset
-        </button>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Create password">
 
+          @if (registerForm.get('password')?.touched &&
+               registerForm.get('password')?.invalid) {
+            <small>Password must contain at least 6 characters.</small>
+          }
+
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+
+          <label>Confirm Password</label>
+
+          <input
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="Confirm your password">
+
+          @if (registerForm.get('confirmPassword')?.touched &&
+               registerForm.hasError('passwordMismatch')) {
+            <small>Passwords do not match.</small>
+          }
+
+        </div>
+
+        <!-- Submit -->
         <button
           type="submit"
-          class="submit-btn"
-        >
-          Register Employee
+          class="register-btn"
+          [disabled]="registerForm.invalid">
+
+          Create Account →
+
         </button>
 
-      </div>
+        <!-- Login Link -->
+        <p class="login-text">
 
-    </form>
+          Already have an account?
+
+          <a routerLink="/login">Login here</a>
+
+        </p>
+
+      </form>
+
+    </div>
 
   </div>
 

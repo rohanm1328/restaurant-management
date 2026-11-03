@@ -1,1 +1,130 @@
-<p>login works!</p>
+<div class="login-page">
+
+  <div class="login-container">
+
+    <!-- Left Information Section -->
+    <div class="login-info">
+
+      <div class="food-icon">🍽️</div>
+
+      <h1>Welcome to <span>RestroManage</span></h1>
+
+      <h3>Your Restaurant, Your Control!</h3>
+
+      <p>
+        Manage your restaurant operations, team members,
+        bookings and daily activities from one place.
+      </p>
+
+      <div class="features">
+        <div>✓ Smart Restaurant Management</div>
+        <div>✓ Easy Team Management</div>
+        <div>✓ Simple Booking Management</div>
+      </div>
+
+    </div>
+
+    <!-- Login Form -->
+    <div class="login-form">
+
+      <div class="form-heading">
+        <h2>Welcome Back!</h2>
+        <p>Login to your RestroManage account</p>
+      </div>
+
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()">
+
+        <!-- Email -->
+        <div class="form-group">
+
+          <label>Email Address</label>
+
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email">
+
+          @if (loginForm.get('email')?.touched &&
+               loginForm.get('email')?.invalid) {
+            <small>Please enter a valid email address.</small>
+          }
+
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <div class="password-field">
+
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter your password">
+
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="showPassword = !showPassword">
+
+              {{ showPassword ? 'Hide' : 'Show' }}
+
+            </button>
+
+          </div>
+
+          @if (loginForm.get('password')?.touched &&
+               loginForm.get('password')?.invalid) {
+            <small>Password must contain at least 6 characters.</small>
+          }
+
+        </div>
+
+        <!-- Remember Me -->
+        <div class="form-options">
+
+          <label class="remember">
+
+            <input
+              type="checkbox"
+              formControlName="rememberMe">
+
+            Remember Me
+
+          </label>
+
+          <a routerLink="/forgot-password">
+            Forgot Password?
+          </a>
+
+        </div>
+
+        <!-- Login Button -->
+        <button
+          type="submit"
+          class="login-btn"
+          [disabled]="loginForm.invalid">
+
+          Login →
+
+        </button>
+
+        <!-- Register Link -->
+        <p class="register-text">
+
+          Don't have an account?
+
+          <a routerLink="/register">Create Account</a>
+
+        </p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
