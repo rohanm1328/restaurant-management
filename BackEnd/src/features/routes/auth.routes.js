@@ -1,15 +1,14 @@
-const express = require('express');
+import express from 'express';
+import { register, login } from '../controllers/auth.controller.js';
+import { authMiddleware } from '../../../src/middlewares/auth.middleware.js';  
+const router = express.Router(); 
 
-const router = express.Router();
-
-const authController = require('../controllers/auth.controller');
-const authMiddleware = require('../../../src/middlewares/auth.middleware');
 
 // Registration API
-router.post('/register', authController.register);
+router.post('/register', register);
 
 // Login API
-router.post('/login', authController.login);
+router.post('/login', login);
 
 // Protected profile API
 router.get('/profile', authMiddleware, (req, res) => {
@@ -22,4 +21,4 @@ router.get('/profile', authMiddleware, (req, res) => {
 
 });
 
-module.exports = router;
+export default router;

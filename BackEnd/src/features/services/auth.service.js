@@ -1,6 +1,6 @@
-const User = require('../../models/user.model');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import User from '../../models/user.model.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 // Generate JWT Token
 const generateToken = (userId, rememberMe = false) => {
@@ -15,7 +15,7 @@ const generateToken = (userId, rememberMe = false) => {
 };
 
 // Register User
-const registerUser = async (userData) => {
+export const registerUser = async (userData) => {
 
     const { name, email, phone, role, password } = userData;
 
@@ -41,7 +41,7 @@ const registerUser = async (userData) => {
 };
 
 // Login User
-const loginUser = async (email, password, rememberMe) => {
+export const loginUser = async (email, password, rememberMe) => {
 
     const user = await User.findOne({
         email: email.toLowerCase()
@@ -74,7 +74,3 @@ const loginUser = async (email, password, rememberMe) => {
     };
 };
 
-module.exports = {
-    registerUser,
-    loginUser
-};
