@@ -80,7 +80,7 @@ export const login = async (req, res) => {
             });
         }
 
-        const result = await authService.loginUser(
+        const result = await loginUser(
             email,
             password,
             rememberMe
