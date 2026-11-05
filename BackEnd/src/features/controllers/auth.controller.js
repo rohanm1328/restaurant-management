@@ -1,7 +1,7 @@
-const authService = require('../services/auth.service');
+import { registerUser, loginUser } from '../services/auth.service.js';
 
 // REGISTER
-const register = async (req, res) => {
+export const register = async (req, res) => {
 
     try {
 
@@ -35,7 +35,7 @@ const register = async (req, res) => {
             });
         }
 
-        const user = await authService.registerUser({
+        const user = await registerUser({
             name,
             email,
             phone,
@@ -67,7 +67,7 @@ const register = async (req, res) => {
 };
 
 // LOGIN
-const login = async (req, res) => {
+export const login = async (req, res) => {
 
     try {
 
@@ -102,7 +102,3 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = {
-    register,
-    login
-};
