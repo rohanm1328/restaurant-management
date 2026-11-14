@@ -75,49 +75,54 @@ export class Register {
     validators: passwordMatchValidator
   });
 
-  onSubmit(): void {
+  
+onSubmit(): void {
 
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
-      return;
-    }
-
-    const formData = this.registerForm.getRawValue();
-
-    // Check password matching
-    if (formData.password !== formData.confirmPassword) {
-      this.registerForm.setErrors({ passwordMismatch: true });
-      return;
-    }
-
-    // Remove confirmPassword before sending to backend
-    const { confirmPassword, ...registerData } = formData;
-
-    this.authService.register(registerData).subscribe({
-
-      next: (response: any) => {
-
-        alert(response.message || 'Registration successful!');
-
-        this.registerForm.reset();
-
-        this.router.navigate(['/login']);
-
-      },
-
-      error: (error) => {
-
-        console.error('Registration Error:', error);
-
-        alert(
-          error.error?.message ||
-          'Registration failed. Please try again.'
-        );
-
-      }
-
-    });
-
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
+    return;
   }
+
+  const formData = this.registerForm.getRawValue();
+
+  if (formData.password !== formData.confirmPassword) {
+    this.registerForm.setErrors({ passwordMismatch: true });
+    return;
+  }
+
+  // Remove confirmPassword
+  const { confirmPassword, ...registerData } = formData;
+
+  // Send registration request
+  this.authService.register(registerData).subscribe({
+
+    next: (response: any) => {
+
+      alert(
+        response.message ||
+        'Registration successful! Waiting for manager approval.'
+      );
+
+      this.registerForm.reset();
+
+      this.router.navigate(['/login']);
+
+    },
+
+    error: (error) => {
+
+      console.error('Registration Error:', error);
+
+      alert(
+        error.error?.message ||
+        'Registration failed. Please try again.'
+      );
+
+    }
+
+  });
+
+}
+
 
 }

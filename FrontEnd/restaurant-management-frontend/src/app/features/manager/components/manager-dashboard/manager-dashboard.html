@@ -1,1 +1,311 @@
-<p>manager-dashboard works!</p>
+<!-- Topbar Header (RestroManage) -->
+<header class="topbar">
+  <div style="display: flex; align-items: center; gap: 13px;">
+    <div class="brand-mark">
+      R<span>✦</span>
+    </div>
+    <div>
+      <div class="eyebrow">RESTAURANT MANAGEMENT SUITE</div>
+      <h1>RestroManage</h1>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <span class="live-dot"></span>
+    <span class="live-text">Live Service</span>
+    <span class="top-date">Manager Portal</span>
+    <div class="top-avatar">RM</div>
+  </div>
+</header>
+
+<!-- Welcome Row -->
+<div class="welcome-row">
+  <div>
+    <h2>Manager overview <span>✦</span></h2>
+    <p>Keep the menu accurate and approve changes before they reach the floor.</p>
+  </div>
+  <div class="shift-chip">● Manager access</div>
+</div>
+
+<!-- Statistics -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-label">Menu items</span>
+    <strong>24</strong>
+    <span class="stat-foot">Across all categories</span>
+    <span class="stat-icon">▤</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-label">Awaiting approval</span>
+    <strong>5</strong>
+    <span class="stat-foot">Needs your review</span>
+    <span class="stat-icon orange">!</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-label">Available today</span>
+    <strong>19</strong>
+    <span class="stat-foot">Visible to waiters</span>
+    <span class="stat-icon green">✓</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-label">Active orders</span>
+    <strong>12</strong>
+    <span class="stat-foot">Currently in service</span>
+    <span class="stat-icon purple">♨</span>
+  </div>
+</div>
+
+<!-- Management Tabs -->
+<div class="management-tabs" style="display: flex; gap: 8px; margin-bottom: 18px;">
+  <button
+    type="button"
+    class="primary-btn"
+    [style.opacity]="activeSection === 'menu' ? '1' : '0.6'"
+    (click)="activeSection = 'menu'">
+    Menu Management
+  </button>
+
+  <button
+    type="button"
+    class="primary-btn"
+    [style.opacity]="activeSection === 'staff' ? '1' : '0.6'"
+    (click)="activeSection = 'staff'">
+    Staff Management
+  </button>
+</div>
+
+<!-- Main 2-Column Grid -->
+<div class="manager-grid">
+
+  <!-- LEFT COLUMN: Switches between Menu and Staff -->
+  @if (activeSection === 'menu') {
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Menu management</h3>
+          <p>Approve new dishes and control availability.</p>
+        </div>
+        <span class="soft-tag">MENU CONTROL</span>
+      </div>
+
+      <div class="add-menu">
+        <input type="text" placeholder="New dish name" />
+
+        <select>
+          <option>Select Category</option>
+          <option>Starters</option>
+          <option>Mains</option>
+          <option>Drinks</option>
+          <option>Desserts</option>
+        </select>
+
+        <input type="number" min="1" placeholder="Price ₹" />
+
+        <button class="primary-btn" type="button">+ Add</button>
+      </div>
+
+      <div class="manager-menu-row">
+        <div class="food-thumb starters">🥗</div>
+        <div class="food-info">
+          <strong>Paneer Tikka</strong>
+          <small>Starters · ₹220</small>
+        </div>
+        <span class="status-pill ready">Approved</span>
+        <button class="small-action" type="button">Disable</button>
+      </div>
+
+      <div class="manager-menu-row">
+        <div class="food-thumb mains">🍛</div>
+        <div class="food-info">
+          <strong>Veg Biryani</strong>
+          <small>Mains · ₹180</small>
+        </div>
+        <span class="status-pill ready">Approved</span>
+        <button class="small-action" type="button">Disable</button>
+      </div>
+
+      <div class="manager-menu-row">
+        <div class="food-thumb drinks">🥤</div>
+        <div class="food-info">
+          <strong>Cold Coffee</strong>
+          <small>Drinks · ₹120</small>
+        </div>
+        <span class="status-pill new">Pending</span>
+        <button class="small-action approve" type="button">Approve</button>
+      </div>
+
+      <div class="manager-menu-row">
+        <div class="food-thumb desserts">🍰</div>
+        <div class="food-info">
+          <strong>Chocolate Cake</strong>
+          <small>Desserts · ₹150</small>
+        </div>
+        <span class="status-pill new">Pending</span>
+        <button class="small-action approve" type="button">Approve</button>
+      </div>
+    </div>
+  }
+
+  @if (activeSection === 'staff') {
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Staff management</h3>
+          <p>Review and manage new staff registration requests.</p>
+        </div>
+        <span class="soft-tag">STAFF CONTROL</span>
+      </div>
+
+      @for (staff of staffList; track staff.email) {
+        <div class="manager-menu-row">
+          <div class="food-thumb starters">👤</div>
+
+          <div class="food-info">
+            <strong>{{ staff.name }}</strong>
+            <small>{{ staff.email }}</small>
+          </div>
+
+          <span class="status-pill">{{ staff.role }}</span>
+
+          <span
+            class="status-pill"
+            [class.new]="staff.status === 'Pending'"
+            [class.ready]="staff.status === 'Approved'">
+            {{ staff.status }}
+          </span>
+
+          @if (staff.status === 'Pending') {
+            <button
+              class="small-action approve"
+              type="button"
+              (click)="updateStaffStatus(staff, 'Approved')">
+              Approve
+            </button>
+
+            <button
+              class="small-action"
+              type="button"
+              (click)="updateStaffStatus(staff, 'Rejected')">
+              Reject
+            </button>
+          }
+        </div>
+      }
+
+      @if (staffList.length === 0) {
+        <p>No staff registration requests found.</p>
+      }
+    </div>
+  }
+
+  <!-- RIGHT COLUMN: Service Snapshot (Remains visible for both tabs) -->
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Service snapshot</h3>
+        <p>Live summary across teams.</p>
+      </div>
+    </div>
+
+    <div class="snapshot-row">
+      <span class="snapshot-icon orange">♨</span>
+      <div>
+        <strong>8 kitchen tickets</strong>
+        <small>New, preparing, or ready</small>
+      </div>
+    </div>
+
+    <div class="snapshot-row">
+      <span class="snapshot-icon purple">₹</span>
+      <div>
+        <strong>₹2,450 outstanding</strong>
+        <small>4 bills awaiting payment</small>
+      </div>
+    </div>
+
+    <div class="snapshot-row">
+      <span class="snapshot-icon green">✓</span>
+      <div>
+        <strong>3 orders ready</strong>
+        <small>Waiting for waiter or counter</small>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <span>✦</span>
+      <div>
+        <strong>Approval workflow</strong>
+        <p>New menu items stay hidden from waiters until you approve them.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Staff Management
+@if (activeSection === 'staff') {
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Staff management</h3>
+        <p>Review and manage new staff registration requests.</p>
+      </div>
+      <span class="soft-tag">STAFF CONTROL</span>
+    </div>
+
+    @for (staff of staffList; track staff.email) {
+      <div class="manager-menu-row">
+        <div class="food-thumb starters">👤</div>
+
+        <div class="food-info">
+          <strong>{{ staff.name }}</strong>
+          <small>{{ staff.email }}</small>
+        </div>
+
+        <span class="status-pill">{{ staff.role }}</span>
+
+        <span
+          class="status-pill"
+          [class.new]="staff.status === 'Pending'"
+          [class.ready]="staff.status === 'Approved'">
+          {{ staff.status }}
+        </span>
+
+        @if (staff.status === 'Pending') {
+          <button
+            class="small-action approve"
+            type="button"
+            (click)="updateStaffStatus(staff, 'Approved')">
+            Approve
+          </button>
+
+          <button
+            class="small-action"
+            type="button"
+            (click)="updateStaffStatus(staff, 'Rejected')">
+            Reject
+          </button>
+        }
+      </div>
+    }
+
+    @if (staffList.length === 0) {
+      <p>No staff registration requests found.</p>
+    }
+  </div>
+} -->
+
+<!-- Footer (RestroManage) -->
+<footer>
+  <strong>RESTROMANAGE</strong>
+  <span>·</span>
+  <span>OPERATIONS &amp; MENU CONTROL</span>
+  <span>·</span>
+  <span>FLOOR SYNC ACTIVE</span>
+  <div class="footer-right">
+    All Systems Operational &copy; 2026 RestroManage
+  </div>
+</footer>
