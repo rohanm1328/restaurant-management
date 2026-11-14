@@ -40,7 +40,9 @@ export const register = async (req, res) => {
             email,
             phone,
             role,
-            password
+            password,
+            status: 'pending'
+
         });
 
         return res.status(201).json({

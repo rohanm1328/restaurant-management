@@ -27,14 +27,30 @@ export const registerUser = async (userData) => {
         throw new Error('Email is already registered');
     }
 
+    
+    if (userData.role === 'Manager') {
+        
+        const existingManager = await User.findOne({
+            role: 'Manager'
+        });
+        
+        if (existingManager) {
+            throw new Error(
+                'Manager already exists. You cannot register as Manager.'
+            );
+        }
+    }
+    
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const user = await User.create({
         name,
         email: email.toLowerCase(),
         phone,
         role,
-        password: hashedPassword
+        password: hashedPassword,
+        status: userData.role === 'Manager'
+            ? 'approved'
+            : 'pending'
     });
 
     return user;
@@ -49,6 +65,14 @@ export const loginUser = async (email, password, rememberMe) => {
 
     if (!user) {
         throw new Error('Invalid email or password');
+    }
+
+    if (user.status === 'pending') {
+    throw new Error('Your account is waiting for manager approval');
+    }
+
+    if (user.status === 'rejected') {
+    throw new Error('Your registration has been rejected');
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -69,7 +93,8 @@ export const loginUser = async (email, password, rememberMe) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            role: user.role
+            role: user.role,
+            status: user.status
         }
     };
 };

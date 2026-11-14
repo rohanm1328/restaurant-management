@@ -62,7 +62,27 @@ private fb = inject(FormBuilder);
 
         alert('Login successful!');
 
-        this.router.navigate(['/dashboard']);
+        switch (response.user.role) {
+
+          case 'Manager':
+            this.router.navigate(['/manager-dashboard']);
+            break;
+
+          case 'Chef':
+            this.router.navigate(['/chef-dashboard']);
+            break;
+
+          case 'Waiter':
+            this.router.navigate(['/waiter-dashboard']);
+            break;
+
+          case 'Counter':
+            this.router.navigate(['/counter-dashboard']);
+            break;
+
+          default:
+            alert('Invalid role');
+        }
 
       },
 
